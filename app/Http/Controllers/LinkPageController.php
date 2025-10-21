@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\LinkPage;
 use App\Models\Link;
+use App\Models\LinkPage;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 
 class LinkPageController extends Controller
@@ -16,6 +17,7 @@ class LinkPageController extends Controller
         $validated = $request->validate([
             'name' => 'required|max:255',
             'bio' => 'nullable|max:500',
+            'password' => 'required|min:4|max:20',  // 추가!
             'profile_image' => 'nullable|image|max:2048', // 최대 2MB
             'links' => 'required|array|min:1',
             'links.*.title' => 'required|max:255',
@@ -29,9 +31,11 @@ class LinkPageController extends Controller
         }
 
         // 링크 페이지 생성 (UUID 자동 생성됨)
+        // 링크 페이지 생성 (비밀번호 암호화)
         $linkPage = LinkPage::create([
             'name' => $validated['name'],
             'bio' => $validated['bio'] ?? null,
+            'password' => Hash::make($validated['password']),  // 암호화!
             'profile_image' => $profileImagePath,
         ]);
 
@@ -66,5 +70,108 @@ class LinkPageController extends Controller
         $link->incrementClicks();
 
         return response()->json(['success' => true]);
+    }
+
+
+    // 비밀번호 확인 페이지 (수정 전)
+    public function editForm($uuid)
+    {
+        $linkPage = LinkPage::where('uuid', $uuid)->firstOrFail();
+        return view('linkpage.verify', compact('linkPage'));
+    }
+
+    // 비밀번호 확인 처리
+    public function verifyPassword(Request $request, $uuid)
+    {
+        $request->validate([
+            'password' => 'required'
+        ]);
+
+        $linkPage = LinkPage::where('uuid', $uuid)->firstOrFail();
+
+        // 비밀번호 확인
+        if (!$linkPage->checkPassword($request->password)) {
+            return back()->withErrors(['password' => '비밀번호가 일치하지 않습니다.']);
+        }
+
+        // 비밀번호가 맞으면 세션에 저장
+        session(['verified_' . $uuid => true]);
+
+        return redirect()->route('linkpage.edit', $uuid);
+    }
+
+    // 수정 페이지
+    public function edit($uuid)
+    {
+        // 세션 확인
+        if (!session('verified_' . $uuid)) {
+            return redirect()->route('linkpage.edit.form', $uuid)
+                ->withErrors(['password' => '먼저 비밀번호를 입력해주세요.']);
+        }
+
+        $linkPage = LinkPage::where('uuid', $uuid)
+            ->with('links')
+            ->firstOrFail();
+
+        return view('linkpage.edit', compact('linkPage'));
+    }
+
+    // 수정 처리
+    public function update(Request $request, $uuid)
+    {
+        // 세션 확인
+        if (!session('verified_' . $uuid)) {
+            return redirect()->route('linkpage.edit.form', $uuid);
+        }
+
+        $linkPage = LinkPage::where('uuid', $uuid)->firstOrFail();
+
+        // 유효성 검증
+        $validated = $request->validate([
+            'name' => 'required|max:255',
+            'bio' => 'nullable|max:500',
+            'profile_image' => 'nullable|image|max:2048',
+            'preset' => 'required|in:basic,minimal,dark',
+            'links' => 'required|array|min:1',
+            'links.*.title' => 'required|max:255',
+            'links.*.url' => 'required|url|max:500',
+        ]);
+
+        // 프로필 이미지 처리
+        if ($request->hasFile('profile_image')) {
+            // 기존 이미지 삭제
+            if ($linkPage->profile_image) {
+                Storage::disk('public')->delete($linkPage->profile_image);
+            }
+            $validated['profile_image'] = $request->file('profile_image')->store('profiles', 'public');
+        }
+
+        // 페이지 정보 업데이트
+        $linkPage->update([
+            'name' => $validated['name'],
+            'bio' => $validated['bio'] ?? null,
+            'password' => Hash::make($validated['password']),
+            'preset' => $validated['preset'],
+            'profile_image' => $validated['profile_image'] ?? $linkPage->profile_image,
+        ]);
+
+        // 기존 링크 모두 삭제
+        $linkPage->links()->delete();
+
+        // 새 링크들 저장
+        foreach ($validated['links'] as $index => $linkData) {
+            Link::create([
+                'link_page_id' => $linkPage->id,
+                'title' => $linkData['title'],
+                'url' => $linkData['url'],
+                'order' => $index,
+            ]);
+        }
+
+        // 세션 정리
+        session()->forget('verified_' . $uuid);
+
+        return redirect()->route('linkpage.show', $uuid)
+            ->with('success', '페이지가 수정되었습니다!');
     }
 }

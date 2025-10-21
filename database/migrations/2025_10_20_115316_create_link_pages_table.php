@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('link_pages', function (Blueprint $table) {
-            $table->id();
+            $table->id(); // 자동 증가 id
             $table->uuid('uuid')->unique();
             $table->string('name');
             $table->text('bio')->nullable();
