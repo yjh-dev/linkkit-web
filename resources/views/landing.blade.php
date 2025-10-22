@@ -3,7 +3,38 @@
 @section('title', 'LinkKit - 모든 링크를 하나로')
 
 @section('content')
+<!-- 상단 네비게이션 -->
+<nav class="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-200">
+    <div class="container mx-auto px-4 py-4 flex items-center justify-between">
+        <a href="/" class="flex items-center gap-2">
+            <span class="text-2xl font-bold text-linkkit-blue">LinkKit</span>
+            <span class="text-xl">🔗</span>
+        </a>
 
+        <div class="flex items-center gap-4">
+            @auth
+                <!-- 로그인 상태 -->
+                <a href="{{ route('dashboard') }}" class="text-gray-700 hover:text-linkkit-blue transition-colors font-medium">
+                    대시보드
+                </a>
+                <form action="{{ route('logout') }}" method="POST" class="inline">
+                    @csrf
+                    <button type="submit" class="text-gray-500 hover:text-gray-700 transition-colors text-sm">
+                        로그아웃
+                    </button>
+                </form>
+            @else
+                <!-- 비로그인 상태 -->
+                <a href="{{ route('auth.kakao') }}" class="flex items-center gap-2 bg-yellow-400 hover:bg-yellow-500 text-gray-900 px-4 py-2 rounded-xl font-semibold transition-all">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 3c5.799 0 10.5 3.664 10.5 8.185 0 4.52-4.701 8.184-10.5 8.184a13.5 13.5 0 01-1.727-.11l-4.408 2.883c-.501.265-.678.236-.472-.413l.892-3.678c-2.88-1.46-4.785-3.99-4.785-6.866C1.5 6.665 6.201 3 12 3z"/>
+                    </svg>
+                    <span>카카오 로그인</span>
+                </a>
+            @endauth
+        </div>
+    </div>
+</nav>
 <!-- 히어로 섹션 -->
 <section class="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-50 flex items-center justify-center px-4 py-20">
     <div class="container mx-auto max-w-6xl">

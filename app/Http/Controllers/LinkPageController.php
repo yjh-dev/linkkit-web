@@ -17,25 +17,27 @@ class LinkPageController extends Controller
         $validated = $request->validate([
             'name' => 'required|max:255',
             'bio' => 'nullable|max:500',
-            'password' => 'required|min:4|max:20',  // 추가!
-            'profile_image' => 'nullable|image|max:2048', // 최대 2MB
+            'password' => 'nullable|min:4|max:20',  // nullable로 변경! (로그인 사용자는 비밀번호 선택)
+            'preset' => 'required|in:basic,minimal,dark',
+            'profile_image' => 'nullable|image|max:2048',
             'links' => 'required|array|min:1',
             'links.*.title' => 'required|max:255',
             'links.*.url' => 'required|url|max:500',
         ]);
-
         // 프로필 이미지 저장
         $profileImagePath = null;
         if ($request->hasFile('profile_image')) {
             $profileImagePath = $request->file('profile_image')->store('profiles', 'public');
         }
 
-        // 링크 페이지 생성 (UUID 자동 생성됨)
-        // 링크 페이지 생성 (비밀번호 암호화)
+
+        // ✨ 링크 페이지 생성 (로그인 사용자 자동 연결)
         $linkPage = LinkPage::create([
+            'user_id' => auth()->id(),  // 로그인 되어 있으면 자동 연결!
             'name' => $validated['name'],
             'bio' => $validated['bio'] ?? null,
-            'password' => Hash::make($validated['password']),  // 암호화!
+            'password' => $validated['password'] ? Hash::make($validated['password']) : null,  // 비밀번호 선택적
+            'preset' => $validated['preset'],
             'profile_image' => $profileImagePath,
         ]);
 
@@ -103,15 +105,20 @@ class LinkPageController extends Controller
     // 수정 페이지
     public function edit($uuid)
     {
-        // 세션 확인
+        $linkPage = LinkPage::where('uuid', $uuid)
+            ->with('links')
+            ->firstOrFail();
+
+        // ✨ 로그인 사용자가 소유자면 바로 접근 가능
+        if ($linkPage->isOwnedBy(auth()->user())) {
+            return view('linkpage.edit', compact('linkPage'));
+        }
+
+        // 비회원이거나 다른 사람 페이지면 세션 확인
         if (!session('verified_' . $uuid)) {
             return redirect()->route('linkpage.edit.form', $uuid)
                 ->withErrors(['password' => '먼저 비밀번호를 입력해주세요.']);
         }
-
-        $linkPage = LinkPage::where('uuid', $uuid)
-            ->with('links')
-            ->firstOrFail();
 
         return view('linkpage.edit', compact('linkPage'));
     }

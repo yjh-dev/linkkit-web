@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LinkPageController;
+use App\Http\Controllers\SocialAuthController;
 
 // 랜딩 페이지
 Route::get('/', function () {
@@ -36,7 +37,6 @@ Route::post('/track/{linkId}', [LinkPageController::class, 'trackClick'])->name(
 
 
 
-// ✨ 새로 추가! ✨
 // 비밀번호 확인 페이지
 Route::get('/edit/{uuid}', [LinkPageController::class, 'editForm'])->name('linkpage.edit.form');
 
@@ -50,3 +50,16 @@ Route::get('/edit/{uuid}/page', [LinkPageController::class, 'edit'])->name('link
 Route::put('/update/{uuid}', [LinkPageController::class, 'update'])->name('linkpage.update');
 
 
+// ✨ 소셜 로그인 라우트 추가!
+Route::get('/auth/kakao', [SocialAuthController::class, 'redirectToKakao'])->name('auth.kakao');
+Route::get('/auth/kakao/callback', [SocialAuthController::class, 'handleKakaoCallback']);
+
+// ✨ 로그아웃
+Route::post('/logout', [SocialAuthController::class, 'logout'])->name('logout');
+
+// ✨ 대시보드 (로그인 필요)
+Route::middleware(['auth'])->group(function () {
+    Route::get('/dashboard', function () {
+        return view('dashboard');
+    })->name('dashboard');
+});

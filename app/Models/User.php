@@ -21,6 +21,9 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'provider',        // 추가
+        'provider_id',     // 추가
+        'profile_image',   // 추가
     ];
 
     /**
@@ -33,16 +36,32 @@ class User extends Authenticatable
         'remember_token',
     ];
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
-    protected function casts(): array
+    // ✨ 관계: 사용자의 링크 페이지들
+    public function linkPages()
     {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
+        return $this->hasMany(LinkPage::class);
+    }
+
+    // ✨ 소셜 로그인으로 사용자 찾기 또는 생성
+    public static function findOrCreateSocialUser($provider, $socialUser)
+    {
+        // 이미 등록된 사용자 찾기
+        $user = self::where('provider', $provider)
+            ->where('provider_id', $socialUser->getId())
+            ->first();
+
+        if ($user) {
+            return $user;
+        }
+
+
+        // 신규 사용자 생성
+        return self::create([
+            'provider' => $provider,
+            'provider_id' => $socialUser->getId(),
+            'name' => $socialUser->getName() ?? $socialUser->getNickname(),
+            'email' => $socialUser->getEmail(),
+            'profile_image' => $socialUser->getAvatar(),
+        ]);
     }
 }

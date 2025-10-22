@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 class LinkPage extends Model
 {
     protected $fillable = [
+        'user_id',
         'uuid',
         'password',
         'preset',
@@ -49,9 +50,20 @@ class LinkPage extends Model
         return $this->hasMany(Link::class)->orderBy('order');
     }
 
-      // 비밀번호 확인 메서드
-      public function checkPassword($password)
-      {
-          return Hash::check($password, $this->password);
-      }
+    // ✨ 관계: 이 페이지의 소유자
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+    // 비밀번호 확인 메서드
+    public function checkPassword($password)
+    {
+        return Hash::check($password, $this->password);
+    }
+
+    // ✨ 사용자가 이 페이지의 소유자인지 확인
+    public function isOwnedBy($user)
+    {
+        return $user && $this->user_id === $user->id;
+    }
 }
