@@ -63,3 +63,6 @@ Route::middleware(['auth'])->group(function () {
         return view('dashboard');
     })->name('dashboard');
 });
+
+// 페이지 삭제
+Route::delete('/delete/{uuid}', [LinkPageController::class, 'destroy'])->name('linkpage.destroy');

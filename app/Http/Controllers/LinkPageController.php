@@ -5,43 +5,52 @@ namespace App\Http\Controllers;
 use App\Models\Link;
 use App\Models\LinkPage;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 
 class LinkPageController extends Controller
 {
-    // 링크 페이지 저장
     public function store(Request $request)
     {
-        // 유효성 검증
-        $validated = $request->validate([
+        $rules = [
             'name' => 'required|max:255',
             'bio' => 'nullable|max:500',
-            'password' => 'nullable|min:4|max:20',  // nullable로 변경! (로그인 사용자는 비밀번호 선택)
+            'password' => auth()->check() ? 'nullable|min:4|max:20' : 'required|min:4|max:20',
             'preset' => 'required|in:basic,minimal,dark',
+            'color' => 'required|regex:/^#[0-9A-Fa-f]{6}$/',
+            'background_type' => 'required|in:solid,gradient',  // ✨ 추가!
+            'background_color' => 'required|regex:/^#[0-9A-Fa-f]{6}$/',  // ✨ 추가!
+            'background_secondary_color' => 'nullable|regex:/^#[0-9A-Fa-f]{6}$/',  // ✨ 추가!
             'profile_image' => 'nullable|image|max:2048',
             'links' => 'required|array|min:1',
             'links.*.title' => 'required|max:255',
             'links.*.url' => 'required|url|max:500',
-        ]);
+        ];
+
+        $validated = $request->validate($rules);
+
         // 프로필 이미지 저장
         $profileImagePath = null;
         if ($request->hasFile('profile_image')) {
             $profileImagePath = $request->file('profile_image')->store('profiles', 'public');
         }
 
-
-        // ✨ 링크 페이지 생성 (로그인 사용자 자동 연결)
+        // 링크 페이지 생성
         $linkPage = LinkPage::create([
-            'user_id' => auth()->id(),  // 로그인 되어 있으면 자동 연결!
+            'user_id' => auth()->id(),
             'name' => $validated['name'],
             'bio' => $validated['bio'] ?? null,
-            'password' => $validated['password'] ? Hash::make($validated['password']) : null,  // 비밀번호 선택적
+            'password' => $validated['password'] ? Hash::make($validated['password']) : null,
             'preset' => $validated['preset'],
+            'color' => $validated['color'],
+            'background_type' => $validated['background_type'],  // ✨ 추가!
+            'background_color' => $validated['background_color'],  // ✨ 추가!
+            'background_secondary_color' => $validated['background_secondary_color'],  // ✨ 추가!
             'profile_image' => $profileImagePath,
         ]);
 
-        // 링크들 저장
+        // 링크들 저장 (기존과 동일)
         foreach ($validated['links'] as $index => $linkData) {
             Link::create([
                 'link_page_id' => $linkPage->id,
@@ -51,7 +60,6 @@ class LinkPageController extends Controller
             ]);
         }
 
-        // 생성된 페이지로 리다이렉트
         return redirect()->route('linkpage.show', $linkPage->uuid);
     }
 
@@ -126,8 +134,11 @@ class LinkPageController extends Controller
     // 수정 처리
     public function update(Request $request, $uuid)
     {
+        // 모든 세션
+
+
         // 세션 확인
-        if (!session('verified_' . $uuid)) {
+        if (!Auth::check() ) {
             return redirect()->route('linkpage.edit.form', $uuid);
         }
 
@@ -137,8 +148,12 @@ class LinkPageController extends Controller
         $validated = $request->validate([
             'name' => 'required|max:255',
             'bio' => 'nullable|max:500',
-            'profile_image' => 'nullable|image|max:2048',
             'preset' => 'required|in:basic,minimal,dark',
+            'color' => 'required|regex:/^#[0-9A-Fa-f]{6}$/',
+            'background_type' => 'required|in:solid,gradient',  // ✨ 추가!
+            'background_color' => 'required|regex:/^#[0-9A-Fa-f]{6}$/',  // ✨ 추가!
+            'background_secondary_color' => 'nullable|regex:/^#[0-9A-Fa-f]{6}$/',  // ✨ 추가!
+            'profile_image' => 'nullable|image|max:2048',
             'links' => 'required|array|min:1',
             'links.*.title' => 'required|max:255',
             'links.*.url' => 'required|url|max:500',
@@ -157,8 +172,11 @@ class LinkPageController extends Controller
         $linkPage->update([
             'name' => $validated['name'],
             'bio' => $validated['bio'] ?? null,
-            'password' => Hash::make($validated['password']),
             'preset' => $validated['preset'],
+            'color' => $validated['color'],
+            'background_type' => $validated['background_type'],  // ✨ 추가!
+            'background_color' => $validated['background_color'],  // ✨ 추가!
+            'background_secondary_color' => $validated['background_secondary_color'],  // ✨ 추가!
             'profile_image' => $validated['profile_image'] ?? $linkPage->profile_image,
         ]);
 
@@ -180,5 +198,33 @@ class LinkPageController extends Controller
 
         return redirect()->route('linkpage.show', $uuid)
             ->with('success', '페이지가 수정되었습니다!');
+    }
+
+
+    // 페이지 삭제
+    public function destroy($uuid)
+    {
+        $linkPage = LinkPage::where('uuid', $uuid)->firstOrFail();
+
+        // 권한 확인 (로그인 사용자가 소유자이거나, 세션 인증된 경우)
+        if (!$linkPage->isOwnedBy(auth()->user()) && !session('verified_' . $uuid)) {
+            return redirect()->route('linkpage.edit.form', $uuid)
+                ->withErrors(['error' => '삭제 권한이 없습니다.']);
+        }
+
+        // 프로필 이미지 삭제
+        if ($linkPage->profile_image) {
+            Storage::disk('public')->delete($linkPage->profile_image);
+        }
+
+        // 페이지 삭제 (cascade로 링크들도 자동 삭제)
+        $linkPage->delete();
+
+        // 로그인 사용자면 대시보드로, 아니면 홈으로
+        if (auth()->check()) {
+            return redirect()->route('dashboard')->with('success', '페이지가 삭제되었습니다.');
+        }
+
+        return redirect('/')->with('success', '페이지가 삭제되었습니다.');
     }
 }

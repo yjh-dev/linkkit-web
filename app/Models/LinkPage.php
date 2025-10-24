@@ -13,11 +13,14 @@ class LinkPage extends Model
         'uuid',
         'password',
         'preset',
+        'color',
+        'background_type',              // ✨ 추가
+        'background_color',             // ✨ 추가
+        'background_secondary_color',   // ✨ 추가
         'name',
         'bio',
         'profile_image'
     ];
-
 
     protected $hidden = [
         'password'

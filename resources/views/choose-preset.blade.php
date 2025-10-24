@@ -27,7 +27,7 @@
             <a href="/create?preset=basic" class="group block">
                 <div class="bg-white rounded-3xl shadow-xl overflow-hidden hover:shadow-2xl transition-all transform hover:-translate-y-2">
                     <!-- 미리보기 -->
-                    <div class="bg-gradient-to-br from-linkkit-blue to-blue-600 p-8 h-80 flex items-center justify-center">
+                    <div class="bg-gradient-to-br from-linkkit-blue to-blue-600 p-8 h-90 flex items-center justify-center">
                         <div class="bg-white rounded-2xl p-6 w-48 shadow-2xl">
                             <div class="w-16 h-16 bg-gradient-to-br from-linkkit-blue to-blue-600 rounded-full mx-auto mb-4"></div>
                             <div class="h-4 bg-gray-200 rounded mb-2"></div>
@@ -46,7 +46,7 @@
                             <h3 class="text-2xl font-bold text-gray-900">Basic</h3>
                             <span class="bg-linkkit-blue text-white px-3 py-1 rounded-full text-sm font-semibold">인기</span>
                         </div>
-                        <p class="text-gray-600 mb-4">
+                        <p class="text-gray-600 mb-4 min-h-20">
                             밝고 친근한 파란색 디자인. 가장 많이 사용되는 스타일이에요.
                         </p>
                         <div class="flex items-center justify-between">
@@ -66,7 +66,7 @@
             <a href="/create?preset=minimal" class="group block">
                 <div class="bg-white rounded-3xl shadow-xl overflow-hidden hover:shadow-2xl transition-all transform hover:-translate-y-2">
                     <!-- 미리보기 -->
-                    <div class="bg-gray-50 p-8 h-80 flex items-center justify-center">
+                    <div class="bg-gray-50 p-8 h-90 flex items-center justify-center">
                         <div class="bg-white rounded-2xl p-6 w-48 border-2 border-gray-200 shadow-lg">
                             <div class="w-16 h-16 bg-gray-200 rounded-full mx-auto mb-4"></div>
                             <div class="h-4 bg-gray-800 rounded mb-2"></div>
@@ -84,7 +84,7 @@
                         <div class="flex items-center justify-between mb-3">
                             <h3 class="text-2xl font-bold text-gray-900">Minimal</h3>
                         </div>
-                        <p class="text-gray-600 mb-4">
+                        <p class="text-gray-600 mb-4 min-h-20">
                             심플하고 깔끔한 디자인. 전문가스러운 인상을 줘요.
                         </p>
                         <div class="flex items-center justify-between">
@@ -104,7 +104,7 @@
             <a href="/create?preset=dark" class="group block">
                 <div class="bg-white rounded-3xl shadow-xl overflow-hidden hover:shadow-2xl transition-all transform hover:-translate-y-2">
                     <!-- 미리보기 -->
-                    <div class="bg-gray-900 p-8 h-80 flex items-center justify-center">
+                    <div class="bg-gray-900 p-8 h-90 flex items-center justify-center">
                         <div class="bg-gray-800 rounded-2xl p-6 w-48 shadow-2xl border border-gray-700">
                             <div class="w-16 h-16 bg-yellow-400 rounded-full mx-auto mb-4"></div>
                             <div class="h-4 bg-white rounded mb-2"></div>
@@ -123,7 +123,7 @@
                             <h3 class="text-2xl font-bold text-gray-900">Dark</h3>
                             <span class="bg-gray-900 text-white px-3 py-1 rounded-full text-sm font-semibold">NEW</span>
                         </div>
-                        <p class="text-gray-600 mb-4">
+                        <p class="text-gray-600 mb-4 min-h-20">
                             다크모드 디자인. 눈이 편하고 세련된 느낌을 줘요.
                         </p>
                         <div class="flex items-center justify-between">
