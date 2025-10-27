@@ -109,7 +109,7 @@
                                 <div class="flex items-center gap-3">
                                     <label class="text-sm text-gray-600 font-medium">또는 직접 선택:</label>
                                     <div class="flex items-center gap-2">
-                                        <input type="color" id="customColor"
+                                        <input type="color" id="customColor" onchange="linkKitPreview.setupColorPickers()"
                                             class="w-12 h-12 rounded-lg border-2 border-gray-200 cursor-pointer"
                                             value="{{ $color }}">
                                         <input type="text" id="colorValue" name="color_display"
@@ -482,6 +482,8 @@
             linkIndex: {{ $linkPage->links->count() + 1 }}
         });
 
+        linkKitPreview.setupColorPickers();      // 색상 파레트 이벤트 연결
+        linkKitPreview.setupBackgroundPickers(); // 배경 파레트 이벤트 연결
         // 기본 입력 필드 리스너 설정
         linkKitPreview.setupBasicInfoListeners();
 

@@ -1,138 +1,146 @@
 <?php
 
 return [
-
-    // 프리셋별 기본 색상
-    'preset_colors' => [
-        'basic' => '#2B7FFF',
-        'minimal' => '#374151',
-        'dark' => '#FBBF24',
+    // 기존 색상 프리셋
+    'colors' => [
+        'blue' => '#2B7FFF',
+        'purple' => '#9333EA',
+        'pink' => '#EC4899',
+        'green' => '#10B981',
+        'orange' => '#F97316',
+        'red' => '#EF4444',
+        'yellow' => '#F59E0B',
+        'gray' => '#6B7280',
     ],
 
-    // 프리셋별 기본 배경
-    'preset_backgrounds' => [
-        'basic' => [
-            'type' => 'gradient',
-            'color' => '#EFF6FF',           // 밝은 파랑
-            'secondary_color' => '#FFFFFF', // 흰색
-            'background_type' => 'gradient',
-        ],
-        'minimal' => [
-            'type' => 'solid',
-            'color' => '#F9FAFB',           // 밝은 회색
-            'secondary_color' => null,
-            'background_type' => 'solid',
-        ],
-        'dark' => [
-            'type' => 'solid',
-            'color' => '#111827',           // 검정
-            'secondary_color' => null,
-            'background_type' => 'solid',
-        ],
+    // 배경 타입
+    'background_types' => [
+        'solid' => '단색',
+        'gradient' => '그라데이션',
+        'image' => '이미지',
+        'video' => '영상',
+        'animated' => '애니메이션',
     ],
 
-    // 추천 색상 팔레트
-    'color_palette' => [
-        'blue' => [
-            'name' => '파랑',
-            'value' => '#2B7FFF',
-            'emoji' => '💙',
+    // 배경 패턴 오버레이
+    'background_overlays' => [
+        'none' => '없음',
+        'dots' => '도트',
+        'stripes' => '스트라이프',
+        'grid' => '그리드',
+        'waves' => '웨이브',
+    ],
+
+    // 프로필 레이아웃
+    'profile_layouts' => [
+        'large' => [
+            'name' => '큰 이미지 (인스타 스타일)',
+            'description' => '프로필 이미지를 크게, 중앙 정렬',
+            'preview' => '/images/layouts/large.png'
         ],
-        'red' => [
-            'name' => '빨강',
-            'value' => '#EF4444',
-            'emoji' => '❤️',
+        'small' => [
+            'name' => '작은 이미지 (명함 스타일)',
+            'description' => '프로필 이미지를 작게, 가로 배치',
+            'preview' => '/images/layouts/small.png'
         ],
-        'green' => [
-            'name' => '초록',
-            'value' => '#10B981',
-            'emoji' => '💚',
-        ],
-        'purple' => [
-            'name' => '보라',
-            'value' => '#8B5CF6',
-            'emoji' => '💜',
-        ],
-        'pink' => [
-            'name' => '핑크',
-            'value' => '#EC4899',
-            'emoji' => '💗',
-        ],
-        'orange' => [
-            'name' => '주황',
-            'value' => '#F97316',
-            'emoji' => '🧡',
-        ],
-        'yellow' => [
-            'name' => '노랑',
-            'value' => '#FBBF24',
-            'emoji' => '💛',
-        ],
-        'gray' => [
-            'name' => '회색',
-            'value' => '#6B7280',
-            'emoji' => '🩶',
+        'banner' => [
+            'name' => '배너 + 프로필 (트위터 스타일)',
+            'description' => '상단 배너 위에 프로필 이미지 겹치기',
+            'preview' => '/images/layouts/banner.png'
         ],
     ],
 
-    // ✨ 추천 배경 프리셋
-    'background_presets' => [
-        'light_blue' => [
-            'name' => '밝은 하늘',
-            'type' => 'gradient',
-            'color' => '#EFF6FF',
-            'secondary_color' => '#FFFFFF',
-            'emoji' => '☁️',
+    // 뱃지 옵션
+    'badges' => [
+        'official' => [
+            'label' => 'Official',
+            'icon' => '✓',
+            'color' => '#2B7FFF',
+            'bg' => '#DBEAFE'
         ],
-        'sunset' => [
-            'name' => '석양',
-            'type' => 'gradient',
-            'color' => '#FEF3C7',
-            'secondary_color' => '#FED7AA',
-            'emoji' => '🌅',
+        'verified' => [
+            'label' => 'Verified',
+            'icon' => '✓',
+            'color' => '#10B981',
+            'bg' => '#D1FAE5'
         ],
-        'ocean' => [
-            'name' => '바다',
-            'type' => 'gradient',
-            'color' => '#DBEAFE',
-            'secondary_color' => '#E0E7FF',
-            'emoji' => '🌊',
+        'new' => [
+            'label' => 'New',
+            'icon' => '🌟',
+            'color' => '#F59E0B',
+            'bg' => '#FEF3C7'
         ],
-        'forest' => [
-            'name' => '숲',
-            'type' => 'gradient',
-            'color' => '#DCFCE7',
-            'secondary_color' => '#F0FDF4',
-            'emoji' => '🌲',
-        ],
-        'lavender' => [
-            'name' => '라벤더',
-            'type' => 'gradient',
-            'color' => '#F3E8FF',
-            'secondary_color' => '#FAE8FF',
-            'emoji' => '💜',
-        ],
-        'white' => [
-            'name' => '순백',
-            'type' => 'solid',
-            'color' => '#FFFFFF',
-            'secondary_color' => null,
-            'emoji' => '⚪',
-        ],
-        'light_gray' => [
-            'name' => '밝은 회색',
-            'type' => 'solid',
-            'color' => '#F9FAFB',
-            'secondary_color' => null,
-            'emoji' => '🤍',
-        ],
-        'dark' => [
-            'name' => '다크',
-            'type' => 'solid',
-            'color' => '#111827',
-            'secondary_color' => null,
-            'emoji' => '🖤',
+        'pro' => [
+            'label' => 'PRO',
+            'icon' => '⭐',
+            'color' => '#9333EA',
+            'bg' => '#F3E8FF'
         ],
     ],
 
+    // 등장 애니메이션
+    'animations' => [
+        'entrance' => [
+            'none' => '없음',
+            'fade' => '페이드인',
+            'slide' => '슬라이드',
+            'bounce' => '바운스',
+            'zoom' => '확대',
+        ],
+        'speed' => [
+            'slow' => '느림 (0.8초)',
+            'normal' => '보통 (0.5초)',
+            'fast' => '빠름 (0.3초)',
+        ],
+    ],
+
+    // 버튼 호버 효과
+    'button_hover_effects' => [
+        'none' => '없음',
+        'scale' => '확대',
+        'lift' => '올라오기',
+        'glow' => '빛나기',
+        'wiggle' => '흔들림',
+        'pulse' => '맥박',
+    ],
+
+    // 버튼 스타일
+    'button_styles' => [
+        'rounded' => [
+            'name' => '둥근 사각형',
+            'class' => 'rounded-xl',
+            'preview' => '/images/buttons/rounded.png'
+        ],
+        'pill' => [
+            'name' => '알약형',
+            'class' => 'rounded-full',
+            'preview' => '/images/buttons/pill.png'
+        ],
+        'sharp' => [
+            'name' => '날카로운 모서리',
+            'class' => 'rounded-none',
+            'preview' => '/images/buttons/sharp.png'
+        ],
+        'soft' => [
+            'name' => '부드러운 모서리',
+            'class' => 'rounded-lg',
+            'preview' => '/images/buttons/soft.png'
+        ],
+    ],
+
+    // 버튼 크기
+    'button_sizes' => [
+        'small' => [
+            'name' => '작게',
+            'class' => 'py-2 px-4 text-sm'
+        ],
+        'medium' => [
+            'name' => '보통',
+            'class' => 'py-3 px-6 text-base'
+        ],
+        'large' => [
+            'name' => '크게',
+            'class' => 'py-4 px-8 text-lg'
+        ],
+    ],
 ];

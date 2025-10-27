@@ -9,11 +9,12 @@
     <!-- Pretendard 폰트 -->
     <link rel="stylesheet" as="style" crossorigin
         href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
-
     <!-- Vite로 CSS, JS 로드 -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-</head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
+</head>
 <body class="font-pretendard bg-gray-50">
     {{-- ✨ Toast 알림 --}}
     @if (session('success'))
@@ -100,5 +101,30 @@
     @yield('content')
     @stack('scripts')
 </body>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const fontSelect = document.getElementById('font_family');
+        const customUpload = document.getElementById('customFontUpload');
+        const fontPreview = document.getElementById('fontPreview');
+
+        if (fontSelect && customUpload) {
+
+            fontSelect.addEventListener('change', function() {
+                if (this.value === 'custom') {
+                    customUpload.style.display = 'block';
+                } else {
+                    customUpload.style.display = 'none';
+
+                    // 미리보기에 폰트 적용
+                    if (fontPreview) {
+                        fontPreview.style.fontFamily = this.value + ', sans-serif';
+                    }
+                }
+            });
+        }
+    });
+    </script>
+
 
 </html>
