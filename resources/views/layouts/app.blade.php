@@ -1,3 +1,5 @@
+<!-- resources/views/layouts/app.blade.php -->
+
 <!DOCTYPE html>
 <html lang="ko">
 
@@ -9,12 +11,16 @@
     <!-- Pretendard 폰트 -->
     <link rel="stylesheet" as="style" crossorigin
         href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+
+    <!-- 👇 여기 추가! Google Fonts 프리로드 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&family=Nanum+Gothic:wght@400;700&family=Nanum+Myeongjo:wght@400;700&family=Gowun+Batang:wght@400;700&family=Roboto:wght@400;500;700&family=Open+Sans:wght@400;600;700&family=Lato:wght@400;700&family=Montserrat:wght@400;600;700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
     <!-- Vite로 CSS, JS 로드 -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
 </head>
+
 <body class="font-pretendard bg-gray-50">
     {{-- ✨ Toast 알림 --}}
     @if (session('success'))
@@ -67,64 +73,8 @@
         }
     </script>
 
-    {{-- Tailwind config에 애니메이션 추가 필요 --}}
-    <style>
-        @keyframes slide-in {
-            from {
-                transform: translateX(400px);
-                opacity: 0;
-            }
-
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
-        }
-
-        @keyframes slide-out {
-            from {
-                transform: translateX(0);
-                opacity: 1;
-            }
-
-            to {
-                transform: translateX(400px);
-                opacity: 0;
-            }
-        }
-
-        .animate-slide-in {
-            animation: slide-in 0.5s ease-out;
-        }
-    </style>
-
     @yield('content')
     @stack('scripts')
 </body>
-
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const fontSelect = document.getElementById('font_family');
-        const customUpload = document.getElementById('customFontUpload');
-        const fontPreview = document.getElementById('fontPreview');
-
-        if (fontSelect && customUpload) {
-
-            fontSelect.addEventListener('change', function() {
-                if (this.value === 'custom') {
-                    customUpload.style.display = 'block';
-                } else {
-                    customUpload.style.display = 'none';
-
-                    // 미리보기에 폰트 적용
-                    if (fontPreview) {
-                        fontPreview.style.fontFamily = this.value + ', sans-serif';
-                    }
-                }
-            });
-        }
-    });
-    </script>
-
 
 </html>

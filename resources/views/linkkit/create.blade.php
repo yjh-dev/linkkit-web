@@ -220,6 +220,54 @@
                                     </div>
                                 </div>
 
+                                 <!-- 폰트 설정 -->
+                                 <div class="mb-8 p-4 bg-indigo-50 rounded-lg border border-indigo-200">
+                                    <h3 class="text-sm font-bold text-gray-900 mb-4">🔤 폰트 설정</h3>
+
+                                    <!-- Google Fonts 프리셋 -->
+                                    <div class="mb-4">
+                                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                                            폰트 선택
+                                        </label>
+                                        <select name="font_family" id="font_family"
+                                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                                            <option value="Pretendard" selected>Pretendard (기본, 한글)</option>
+                                            <option value="Noto Sans KR">Noto Sans KR (깔끔한 고딕)</option>
+                                            <option value="Nanum Gothic">나눔고딕</option>
+                                            <option value="Nanum Myeongjo">나눔명조</option>
+                                            <option value="Gowun Batang">고운바탕</option>
+                                            <option value="Roboto">Roboto (영문)</option>
+                                            <option value="Open Sans">Open Sans (영문)</option>
+                                            <option value="Lato">Lato (영문)</option>
+                                            <option value="Montserrat">Montserrat (영문)</option>
+                                            <option value="Poppins">Poppins (영문)</option>
+                                            <option value="custom">커스텀 폰트 (직접 업로드)</option>
+                                        </select>
+                                        <p class="text-xs text-gray-500 mt-1">페이지 전체에 적용됩니다</p>
+                                    </div>
+
+                                    <!-- 커스텀 폰트 업로드 -->
+                                    <div id="customFontUpload" style="display: none;">
+                                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                                            커스텀 폰트 파일
+                                        </label>
+                                        <input type="file" name="custom_font" id="custom_font"
+                                            accept=".ttf,.woff,.woff2,.otf"
+                                            class="w-full px-4 py-3 border border-gray-300 rounded-lg">
+                                        <p class="text-xs text-gray-500 mt-1">지원 형식: .ttf, .woff, .woff2, .otf (최대 5MB)</p>
+                                    </div>
+
+                                    <!-- 폰트 미리보기 -->
+                                    <div class="mt-4 p-4 bg-white rounded-lg border border-gray-200">
+                                        <p class="text-xs text-gray-500 mb-2">폰트 미리보기</p>
+                                        <div id="fontPreview" style="transition: font-family 0.3s;">
+                                            <p class="text-2xl font-bold mb-2">안녕하세요 Hello!</p>
+                                            <p class="text-base">가나다라마바사 ABCDEFG</p>
+                                            <p class="text-sm text-gray-600">1234567890 !@#$%</p>
+                                        </div>
+                                    </div>
+                                </div>
+
                                 <!-- 배경 타입 -->
                                 <div class="mb-8">
                                     <label class="block text-sm font-medium text-gray-700 mb-3">
@@ -368,53 +416,7 @@
                                     </select>
                                 </div>
 
-                                <!-- 폰트 설정 -->
-                                <div class="mb-8 p-4 bg-indigo-50 rounded-lg border border-indigo-200">
-                                    <h3 class="text-sm font-bold text-gray-900 mb-4">🔤 폰트 설정</h3>
 
-                                    <!-- Google Fonts 프리셋 -->
-                                    <div class="mb-4">
-                                        <label class="block text-sm font-medium text-gray-700 mb-2">
-                                            폰트 선택
-                                        </label>
-                                        <select name="font_family" id="font_family"
-                                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
-                                            <option value="Pretendard" selected>Pretendard (기본, 한글)</option>
-                                            <option value="Noto Sans KR">Noto Sans KR (깔끔한 고딕)</option>
-                                            <option value="Nanum Gothic">나눔고딕</option>
-                                            <option value="Nanum Myeongjo">나눔명조</option>
-                                            <option value="Gowun Batang">고운바탕</option>
-                                            <option value="Roboto">Roboto (영문)</option>
-                                            <option value="Open Sans">Open Sans (영문)</option>
-                                            <option value="Lato">Lato (영문)</option>
-                                            <option value="Montserrat">Montserrat (영문)</option>
-                                            <option value="Poppins">Poppins (영문)</option>
-                                            <option value="custom">커스텀 폰트 (직접 업로드)</option>
-                                        </select>
-                                        <p class="text-xs text-gray-500 mt-1">페이지 전체에 적용됩니다</p>
-                                    </div>
-
-                                    <!-- 커스텀 폰트 업로드 -->
-                                    <div id="customFontUpload" style="display: none;">
-                                        <label class="block text-sm font-medium text-gray-700 mb-2">
-                                            커스텀 폰트 파일
-                                        </label>
-                                        <input type="file" name="custom_font" id="custom_font"
-                                            accept=".ttf,.woff,.woff2,.otf"
-                                            class="w-full px-4 py-3 border border-gray-300 rounded-lg">
-                                        <p class="text-xs text-gray-500 mt-1">지원 형식: .ttf, .woff, .woff2, .otf (최대 5MB)</p>
-                                    </div>
-
-                                    <!-- 폰트 미리보기 -->
-                                    <div class="mt-4 p-4 bg-white rounded-lg border border-gray-200">
-                                        <p class="text-xs text-gray-500 mb-2">폰트 미리보기</p>
-                                        <div id="fontPreview" style="transition: font-family 0.3s;">
-                                            <p class="text-2xl font-bold mb-2">안녕하세요 Hello!</p>
-                                            <p class="text-base">가나다라마바사 ABCDEFG</p>
-                                            <p class="text-sm text-gray-600">1234567890 !@#$%</p>
-                                        </div>
-                                    </div>
-                                </div>
                             </div>
 
                             <!-- 탭 3: 링크 관리 -->

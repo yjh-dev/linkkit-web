@@ -244,7 +244,31 @@ function initForm() {
     // 폰트 선택
     safeAddListener('font_family', 'change', function() {
         const fontValue = this.value;
-        loadGoogleFont(fontValue);
+        console.log('🔤 Font changed to:', fontValue);
+
+        // 커스텀 폰트 업로드 영역 표시/숨김
+        const customUpload = document.getElementById('customFontUpload');
+        if (customUpload) {
+            customUpload.style.display = fontValue === 'custom' ? 'block' : 'none';
+        }
+
+        // 폰트 미리보기 박스에 즉시 적용
+        // 자식요소에 폰트 적용
+        const fontPreview = document.getElementById('fontPreview');
+        if (fontPreview && fontValue !== 'custom') {
+
+            fontPreview.style.fontFamily = fontValue + ', sans-serif';
+            Array.from(fontPreview.children).forEach(child => {
+                child.style.fontFamily = fontValue + ', sans-serif';
+              });
+        }
+
+        // Google Font 로드 (Pretendard와 custom 제외)
+        if (fontValue !== 'Pretendard' && fontValue !== 'custom') {
+            loadGoogleFont(fontValue);
+        }
+
+        // 미리보기 업데이트
         updatePreview();
     });
 
@@ -945,7 +969,12 @@ function updatePreview() {
             loadGoogleFont(fontFamily);
         }
 
+        // 폰트 스타일 (공백 있는 폰트는 따옴표 추가)
+        const fontFamilyStyle = fontFamily.includes(' ') ? `'${fontFamily}'` : fontFamily;
+        const fontStyle = `font-family: ${fontFamilyStyle}, sans-serif;`;
+
         console.log('🔤 Current Font:', fontFamily);
+        console.log('📝 Font Style:', fontStyle);
 
         // 프로필 HTML
         let profileHTML = '';
@@ -956,8 +985,8 @@ function updatePreview() {
                         alt="${name}"
                         onerror="this.src='${PLACEHOLDER_PROFILE}'"
                         class="w-24 h-24 rounded-full mx-auto mb-4 border-4 border-white shadow-lg object-cover">
-                    <h1 class="${textSizeClass} ${textWeightClass} mb-2 drop-shadow-lg" style="color: ${textColor};">${name}</h1>
-                    ${bio ? `<p class="opacity-90" style="color: ${textColor};">${bio}</p>` : ''}
+                    <h1 class="${textSizeClass} ${textWeightClass} mb-2 drop-shadow-lg" style="color: ${textColor}; ${fontStyle}">${name}</h1>
+                    ${bio ? `<p class="opacity-90" style="color: ${textColor}; ${fontStyle}">${bio}</p>` : ''}
                 </div>
             `;
         } else if (profileLayout === 'small') {
@@ -968,8 +997,8 @@ function updatePreview() {
                         onerror="this.src='${PLACEHOLDER_PROFILE}'"
                         class="w-16 h-16 rounded-full border-2 border-white shadow-lg object-cover flex-shrink-0">
                     <div>
-                        <h1 class="${textSizeClass} ${textWeightClass}" style="color: ${textColor};">${name}</h1>
-                        ${bio ? `<p class="text-sm opacity-90" style="color: ${textColor};">${bio}</p>` : ''}
+                        <h1 class="${textSizeClass} ${textWeightClass}" style="color: ${textColor}; ${fontStyle}">${name}</h1>
+                        ${bio ? `<p class="text-sm opacity-90" style="color: ${textColor}; ${fontStyle}">${bio}</p>` : ''}
                     </div>
                 </div>
             `;
@@ -986,8 +1015,8 @@ function updatePreview() {
                             alt="${name}"
                             onerror="this.src='${PLACEHOLDER_PROFILE}'"
                             class="w-20 h-20 rounded-full border-4 border-white shadow-lg mb-3 object-cover">
-                        <h1 class="${textSizeClass} ${textWeightClass} drop-shadow-lg" style="color: ${textColor};">${name}</h1>
-                        ${bio ? `<p class="opacity-90" style="color: ${textColor};">${bio}</p>` : ''}
+                        <h1 class="${textSizeClass} ${textWeightClass} drop-shadow-lg" style="color: ${textColor}; ${fontStyle}">${name}</h1>
+                        ${bio ? `<p class="opacity-90" style="color: ${textColor}; ${fontStyle}">${bio}</p>` : ''}
                     </div>
                 </div>
             `;
@@ -1013,7 +1042,7 @@ function updatePreview() {
                     linksHTML += `
                         <a href="${link.url}"
                             class="${buttonClass} ${hoverClass} font-medium flex items-center justify-center gap-2 mb-3 shadow-lg transition-all animate-${animationEntrance} animate-${animationSpeed}"
-                            style="${animationDelay} background-color: ${link.button_bg_color}; color: ${link.button_text_color};">
+                            style="${animationDelay} background-color: ${link.button_bg_color}; color: ${link.button_text_color}; ${fontStyle}">
                             <span class="text-xl">${iconEmoji}</span>
                             <span>${link.title}</span>
                         </a>
@@ -1031,8 +1060,8 @@ function updatePreview() {
                                     alt="${link.title}">
                             ` : ''}
                             <div class="p-4">
-                                <h3 class="font-bold text-gray-900 mb-1">${link.title}</h3>
-                                ${link.description ? `<p class="text-sm text-gray-600">${link.description}</p>` : ''}
+                                <h3 class="font-bold text-gray-900 mb-1" style="${fontStyle}">${link.title}</h3>
+                                ${link.description ? `<p class="text-sm text-gray-600" style="${fontStyle}">${link.description}</p>` : ''}
                             </div>
                         </a>
                     `;
@@ -1054,7 +1083,7 @@ function updatePreview() {
                     linksHTML += `
                         <a href="${link.url}"
                             class="${buttonClass} ${hoverClass} shadow-lg transition-all mb-3 block animate-${animationEntrance} animate-${animationSpeed}"
-                            style="${animationDelay} background-color: ${link.button_bg_color}; color: ${link.button_text_color};">
+                            style="${animationDelay} background-color: ${link.button_bg_color}; color: ${link.button_text_color}; ${fontStyle}">
                             <div class="flex items-center justify-between">
                                 <span class="font-medium">${link.title}</span>
                                 <div class="text-right">
@@ -1085,7 +1114,7 @@ function updatePreview() {
                     linksHTML += `
                         <a href="${link.url}"
                             class="${buttonClass} ${hoverClass} font-medium flex items-center justify-center gap-2 mb-3 shadow-lg transition-all animate-${animationEntrance} animate-${animationSpeed}"
-                            style="${animationDelay} background-color: ${link.button_bg_color}; color: ${link.button_text_color};">
+                            style="${animationDelay} background-color: ${link.button_bg_color}; color: ${link.button_text_color}; ${fontStyle}">
                             <span class="text-xl">${contactIcon}</span>
                             <span>${link.title}</span>
                         </a>
@@ -1095,7 +1124,7 @@ function updatePreview() {
                     linksHTML += `
                         <a href="${link.url}"
                             class="${buttonClass} ${hoverClass} font-medium text-center block mb-3 shadow-lg transition-all animate-${animationEntrance} animate-${animationSpeed}"
-                            style="${animationDelay} background-color: ${link.button_bg_color}; color: ${link.button_text_color};">
+                            style="${animationDelay} background-color: ${link.button_bg_color}; color: ${link.button_text_color}; ${fontStyle}">
                             ${link.title}
                         </a>
                     `;
@@ -1104,14 +1133,14 @@ function updatePreview() {
         });
 
         // 전체 미리보기 HTML
-        const fontFamilyStyle = fontFamily.includes(' ') ? `'${fontFamily}'` : fontFamily;
+        // const fontFamilyStylePreview = fontFamily.includes(' ') ? `'${fontFamily}'` : fontFamily;
         const previewHTML = `
             <div class="relative w-full h-full" style="${backgroundStyle}${backgroundStyle ? ' ' : ''}font-family: ${fontFamilyStyle}, sans-serif;">
                 ${backgroundHTML}
                 <div class="relative z-10 p-6 overflow-y-auto h-full">
                     ${profileHTML}
                     <div class="space-y-3">
-                        ${linksHTML || `<p class="text-center opacity-70" style="color: ${textColor};">링크를 추가하세요</p>`}
+                        ${linksHTML || `<p class="text-center opacity-70" style="color: ${textColor}; ${fontStyle}">링크를 추가하세요</p>`}
                     </div>
                 </div>
             </div>
@@ -1155,17 +1184,44 @@ function getButtonClass(style, size) {
 let loadedFonts = new Set(['Pretendard']); // 기본 폰트는 이미 로드됨
 
 function loadGoogleFont(fontName) {
-    if (fontName === 'Pretendard' || fontName === 'custom' || loadedFonts.has(fontName)) {
+    if (!fontName || fontName === 'Pretendard' || fontName === 'custom' || loadedFonts.has(fontName)) {
+        console.log('⏭️ Font already loaded or skipped:', fontName);
         return; // 이미 로드되었거나 커스텀 폰트면 스킵
     }
 
-    // Google Fonts CSS 동적 로드
-    const link = document.createElement('link');
-    link.rel = 'stylesheet';
-    link.href = `https://fonts.googleapis.com/css2?family=${fontName.replace(' ', '+')}:wght@400;500;600;700&display=swap`;
-    document.head.appendChild(link);
+    console.log('📥 Loading Google Font:', fontName);
 
-    loadedFonts.add(fontName);
+    // 기존 링크가 있는지 확인
+    const existingLink = document.querySelector(`link[href*="family=${fontName.replace(' ', '+')}"]`);
+    if (existingLink) {
+        console.log('✅ Font link already exists:', fontName);
+        loadedFonts.add(fontName);
+        return;
+    }
+
+    try {
+        // Google Fonts CSS 동적 로드
+        const link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = `https://fonts.googleapis.com/css2?family=${fontName.replace(/ /g, '+')}:wght@400;500;600;700&display=swap`;
+
+        // 로드 완료 이벤트
+        link.onload = function() {
+            console.log('✅ Font loaded successfully:', fontName);
+            loadedFonts.add(fontName);
+        };
+
+        // 에러 처리
+        link.onerror = function() {
+            console.error('❌ Font load failed:', fontName);
+        };
+
+        document.head.appendChild(link);
+        console.log('📤 Font link added to head:', link.href);
+
+    } catch (error) {
+        console.error('❌ Error loading font:', fontName, error);
+    }
 }
 
 /**
@@ -1236,15 +1292,23 @@ function handleCustomFont(event) {
  */
 function getCurrentFont() {
     const fontSelect = document.getElementById('font_family');
-    if (!fontSelect) return 'Pretendard';
+
+    if (!fontSelect) {
+        console.warn('⚠️ font_family element not found! Using default Pretendard');
+        return 'Pretendard';
+    }
 
     const fontValue = fontSelect.value;
+    console.log('📝 Font select value:', fontValue);
 
     if (fontValue === 'custom' && customFontData) {
+        console.log('✅ Using custom font');
         return 'CustomFont';
     }
 
-    return fontValue || 'Pretendard';
+    const result = fontValue || 'Pretendard';
+    console.log('🎯 Final font:', result);
+    return result;
 }
 
 // 전역 함수로 노출
