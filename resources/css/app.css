@@ -1,103 +1,311 @@
-/* resources/css/app.css */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* 1) 기본(프리플라이트) 이후에 전역 폰트 적용 */
+/* 기본 폰트 */
 @layer base {
-  * { font-family: 'Pretendard', sans-serif; }
+  * {
+    @apply font-sans;
+    font-family: 'Pretendard', sans-serif;
+  }
 }
 
-/* 2) 컴포넌트: @apply 사용 클래스와 구조화된 컴포넌트 스타일 */
 @layer components {
-  /* 탭 */
+  /* ========== 탭 스타일 ========== */
   .tab-button {
-    @apply px-6 py-3 font-medium text-gray-600 border-b-2 border-transparent transition-all cursor-pointer;
+    @apply px-4 md:px-6 py-3 font-medium text-gray-600 border-b-2 border-transparent transition-all cursor-pointer text-sm md:text-base;
   }
+
   .tab-button.active {
     @apply text-blue-600 border-blue-600;
   }
-  .tab-content { @apply hidden; }
-  .tab-content.active { @apply block; }
 
-  /* 스마트폰 미리보123기 */
+  .tab-content {
+    @apply hidden;
+  }
+
+  .tab-content.active {
+    @apply block;
+  }
+
+  /* ========== 스마트폰 미리보기 ========== */
   .phone-mockup {
+    @apply sticky top-5 bg-white;
     width: 375px;
     height: 667px;
-    border: 12px solid #1f2937; /* gray-800 */
+    border: 12px solid #1f2937;
     border-radius: 36px;
     box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-    position: sticky;
-    top: 20px;
-    background: white;
   }
 
-  /* 모바일 플로팅 버튼 */
-  .mobile-preview-btn {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    z-index: 40;
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #2563eb, #3b82f6); /* blue-600 -> blue-500 */
-    box-shadow: 0 8px 24px rgba(37, 99, 235, 0.4);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    font-size: 24px;
-    cursor: pointer;
-    transition: all 0.3s;
+  .phone-mockup-mobile {
+    @apply w-full bg-white;
+    height: calc(100vh - 120px);
+    max-height: 700px;
+    border: 8px solid #1f2937;
+    border-radius: 24px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
   }
+
+  @media (max-width: 640px) {
+    .phone-mockup {
+      @apply w-full h-full border-0 rounded-none shadow-none static;
+    }
+
+    .phone-mockup-mobile {
+      @apply border-0;
+      height: calc(100vh - 100px);
+      max-height: none;
+      border-width: 6px;
+      border-radius: 20px;
+    }
+  }
+
+  /* ========== 모바일 플로팅 버튼 ========== */
+  .mobile-preview-btn {
+    @apply fixed bottom-5 right-5 z-40 w-14 h-14 rounded-full flex items-center justify-center text-white text-xl cursor-pointer transition-all;
+    background: linear-gradient(135deg, #2563eb, #3b82f6);
+    box-shadow: 0 8px 24px rgba(37, 99, 235, 0.4);
+  }
+
   .mobile-preview-btn:hover {
-    transform: scale(1.1);
+    @apply scale-110;
     box-shadow: 0 12px 32px rgba(37, 99, 235, 0.5);
   }
 
-  /* 데스크톱/모바일 표시 제어 (컴포넌트에서 미디어쿼리 허용) */
+  @media (max-width: 640px) {
+    .mobile-preview-btn {
+      @apply w-[52px] h-[52px] bottom-4 right-4 text-lg;
+    }
+  }
+
   @media (max-width: 1023px) {
-    .desktop-preview { display: none !important; }
+    .desktop-preview {
+      @apply hidden;
+    }
   }
+
   @media (min-width: 1024px) {
-    .mobile-preview-btn { display: none !important; }
+    .mobile-preview-btn {
+      @apply hidden;
+    }
   }
 
-  /* 모바일 미리보기 모달 */
+  /* ========== 모바일 미리보기 모달 ========== */
   .preview-modal {
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.8);
-    z-index: 50;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    /* padding: 20px; */
+    @apply fixed inset-0 z-50 flex items-center justify-center;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(4px);
   }
 
-  /* 호버 효과들 */
-  .hover-scale { transition: transform 0.2s; }
-  .hover-scale:hover { transform: scale(1.05); }
+  /* ========== 링크 카드 UI ========== */
 
-  .hover-lift { transition: transform 0.2s, box-shadow 0.2s; }
-  .hover-lift:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+  .link-item-improved {
+    @apply transition-all duration-200;
   }
 
-  .hover-glow { transition: box-shadow 0.2s; }
-  .hover-glow:hover { box-shadow: 0 0 20px rgba(43, 127, 255, 0.5); }
+  .link-card {
+    @apply bg-white border-2 border-gray-200 rounded-xl overflow-hidden shadow-sm transition-all duration-200;
+  }
 
-  /* 색상 옵션 하이라이트 */
-  .color-option { position: relative; cursor: pointer; }
+  .link-card:hover {
+    @apply border-blue-300 shadow-md;
+  }
+
+  .link-card-header {
+    @apply flex items-center gap-2 border-b border-gray-200 px-3 py-2.5;
+    background: linear-gradient(to right, #eff6ff, rgba(239, 246, 255, 0.5), transparent);
+  }
+
+  .drag-handle-improved {
+    @apply flex items-center justify-center w-10 h-10 rounded-lg text-white cursor-grab active:cursor-grabbing transition-all duration-200 flex-shrink-0;
+    background: linear-gradient(to bottom right, #3b82f6, #2563eb);
+    box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3);
+  }
+
+  .drag-handle-improved:hover {
+    @apply scale-105;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
+  }
+
+  .drag-handle-improved:active {
+    @apply scale-95;
+  }
+
+  @media (max-width: 640px) {
+    .drag-handle-improved {
+      @apply w-12 h-12;
+    }
+  }
+
+  .link-badge {
+    @apply inline-flex items-center justify-center w-7 h-7 text-white text-xs font-bold rounded-full flex-shrink-0 shadow-sm;
+    background: linear-gradient(to bottom right, #374151, #111827);
+  }
+
+  .link-toggle-btn,
+  .link-delete-btn {
+    @apply p-2 rounded-lg transition-all duration-200 flex-shrink-0;
+  }
+
+  .link-toggle-btn {
+    @apply text-gray-600 hover:text-blue-600 hover:bg-blue-50;
+  }
+
+  .link-delete-btn {
+    @apply text-gray-500 hover:text-red-600 hover:bg-red-50;
+  }
+
+  .link-card-body {
+    @apply p-4 md:p-5 overflow-hidden transition-all duration-300;
+    max-height: 1000px;
+  }
+
+  .link-card-body.collapsed {
+    @apply pt-0 pb-0;
+    max-height: 0;
+  }
+
+  .link-input,
+  .link-textarea,
+  .link-url-input,
+  .link-type-select {
+    @apply w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-sm;
+  }
+
+  .link-textarea {
+    @apply resize-none;
+  }
+
+  .link-type-select {
+    @apply cursor-pointer bg-white;
+  }
+
+  /* 자동완성 버튼 */
+  .auto-fill-btn {
+    @apply w-8 h-8 flex items-center justify-center text-gray-400 hover:text-blue-600 rounded-full hover:bg-blue-50 transition-all duration-200 opacity-0;
+  }
+
+  .auto-fill-btn:hover {
+    @apply scale-110;
+  }
+
+  .group:hover .auto-fill-btn {
+    @apply opacity-100;
+  }
+
+  .link-url-input:focus ~ .group .auto-fill-btn,
+  .link-url-input:hover ~ .group .auto-fill-btn {
+    @apply opacity-100;
+  }
+
+  .tooltip {
+    @apply absolute right-0 top-full mt-2 px-3 py-2 bg-gray-900 text-white text-xs rounded-lg whitespace-nowrap pointer-events-none opacity-0 invisible transition-all duration-200 z-50;
+    transform: translateY(-8px);
+  }
+
+  .group:hover .tooltip {
+    @apply opacity-100 visible;
+    transform: translateY(0);
+  }
+
+  .tooltip::before {
+    content: '';
+    @apply absolute bottom-full right-3;
+    border: 6px solid transparent;
+    border-bottom-color: #111827;
+  }
+
+  @media (max-width: 640px) {
+    .tooltip {
+      @apply right-auto left-0;
+    }
+
+    .tooltip::before {
+      @apply right-auto left-3;
+    }
+
+    .auto-fill-btn {
+      @apply opacity-70;
+    }
+  }
+
+  /* ========== 드래그 앤 드롭 ========== */
+
+  .sortable-ghost {
+    @apply opacity-40 border-2 border-dashed;
+    background: linear-gradient(135deg, #e0e7ff, #ddd6fe);
+    border-color: #3b82f6 !important;
+    transform: rotate(2deg);
+  }
+
+  .sortable-chosen {
+    @apply shadow-2xl;
+  }
+
+  /* ========== 토스트 알림 ========== */
+
+  .toast {
+    @apply fixed bottom-6 right-6 text-white px-5 py-3 rounded-xl font-semibold text-sm flex items-center gap-2 max-w-[90vw] pointer-events-none opacity-0 transition-all duration-300 z-[9999];
+    background: linear-gradient(135deg, #10b981, #059669);
+    box-shadow: 0 8px 24px -4px rgba(16, 185, 129, 0.4);
+    transform: translateY(20px) scale(0.9);
+  }
+
+  .toast.show {
+    @apply opacity-100;
+    transform: translateY(0) scale(1);
+  }
+
+  .toast::before {
+    content: '✓';
+    @apply inline-flex items-center justify-center w-5 h-5 rounded-full text-sm flex-shrink-0;
+    background: rgba(255, 255, 255, 0.2);
+  }
+
+  @media (max-width: 640px) {
+    .toast {
+      @apply bottom-20 right-4 left-4 w-auto px-[18px] py-2.5 text-[0.8125rem];
+    }
+  }
+
+  #autoSaveStatus {
+    @apply pointer-events-none;
+    animation: slideInRight 0.3s ease-out;
+  }
+
+  @media (max-width: 640px) {
+    #autoSaveStatus {
+      @apply top-auto bottom-20 right-4 left-4 text-center;
+    }
+  }
+
+  #draftNotification {
+    animation: slideInDown 0.4s ease-out;
+  }
+
+  /* ========== 메타데이터 로딩 ========== */
+
+  .metadata-loading {
+    @apply inline-block w-3.5 h-3.5 border-2 border-gray-200 rounded-full;
+    border-top-color: #3b82f6;
+    animation: spin 0.6s linear infinite;
+  }
+
+  /* ========== 색상 옵션 ========== */
+
+  .color-option {
+    @apply relative cursor-pointer;
+  }
+
   .color-option input:checked + div {
     border-color: white !important;
     box-shadow: 0 0 0 3px #2563eb;
   }
 
-  /* 슬라이더 thumb 스타일 */
-.slider-thumb::-webkit-slider-thumb {
+  /* ========== 슬라이더 ========== */
+
+  .slider-thumb::-webkit-slider-thumb {
     appearance: none;
     width: 20px;
     height: 20px;
@@ -105,9 +313,9 @@
     cursor: pointer;
     border-radius: 50%;
     box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-}
+  }
 
-.slider-thumb::-moz-range-thumb {
+  .slider-thumb::-moz-range-thumb {
     width: 20px;
     height: 20px;
     background: #3B82F6;
@@ -115,40 +323,105 @@
     border-radius: 50%;
     border: none;
     box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-}
+  }
 
-.slider-thumb::-webkit-slider-thumb:hover {
+  .slider-thumb::-webkit-slider-thumb:hover {
     background: #2563EB;
     transform: scale(1.1);
-}
+  }
 
-.slider-thumb::-moz-range-thumb:hover {
+  .slider-thumb::-moz-range-thumb:hover {
     background: #2563EB;
     transform: scale(1.1);
-}
+  }
+
+  @media (max-width: 640px) {
+    .slider-thumb::-webkit-slider-thumb {
+      width: 24px;
+      height: 24px;
+    }
+
+    .slider-thumb::-moz-range-thumb {
+      width: 24px;
+      height: 24px;
+    }
+  }
+
+  /* ========== 스크롤바 숨기기 ========== */
+
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    @apply hidden;
+  }
 }
 
-/* 3) 유틸리티: 키프레임 및 애니메이션 유틸 클래스를 이 레이어에 배치 */
+/* ============================================
+   애니메이션 정의
+   ============================================ */
+
 @layer utilities {
   @keyframes fadeIn {
     from { opacity: 0; }
     to   { opacity: 1; }
   }
+
   @keyframes slideUp {
     from { transform: translateY(20px); opacity: 0; }
     to   { transform: translateY(0);    opacity: 1; }
   }
+
   @keyframes bounceIn {
     0%   { transform: scale(0.8); opacity: 0; }
     50%  { transform: scale(1.05); }
     100% { transform: scale(1); opacity: 1; }
   }
+
   @keyframes zoomIn {
     from { transform: scale(0.9); opacity: 0; }
     to   { transform: scale(1);   opacity: 1; }
   }
 
-  /* Tailwind의 animate-*와 충돌 없도록 명확히 지정 */
+  @keyframes slideInRight {
+    from {
+      transform: translateX(400px);
+      opacity: 0;
+    }
+    to {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+
+  @keyframes slideInDown {
+    from {
+      transform: translateY(-100px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  @keyframes pulse-scale {
+    0%, 100% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.05);
+    }
+  }
+
   .animate-fade  { animation: fadeIn 0.5s ease-in; }
   .animate-slide { animation: slideUp 0.5s ease-out; }
   .animate-bounce { animation: bounceIn 0.5s ease-out; }
@@ -157,33 +430,136 @@
   .animate-slow   { animation-duration: 0.8s !important; }
   .animate-normal { animation-duration: 0.5s !important; }
   .animate-fast   { animation-duration: 0.3s !important; }
+
+  .animate-slide-in-right {
+    animation: slideInRight 0.3s ease-out;
+  }
+
+  .animate-slide-in-down {
+    animation: slideInDown 0.4s ease-out;
+  }
+
+  .animate-pulse-scale {
+    animation: pulse-scale 2s ease-in-out infinite;
+  }
 }
 
+/* ============================================
+   모바일 반응형
+   ============================================ */
 
-@keyframes slide-in {
-    from {
-        transform: translateX(400px);
-        opacity: 0;
-    }
+@media (max-width: 640px) {
+  .container {
+    @apply px-4;
+  }
 
-    to {
-        transform: translateX(0);
-        opacity: 1;
-    }
+  input[type="text"],
+  input[type="url"],
+  input[type="email"],
+  input[type="password"],
+  textarea,
+  select {
+    font-size: 16px; /* iOS 자동 줌 방지 */
+  }
+
+  button {
+    @apply min-h-[44px];
+  }
+
+  h1 {
+    @apply text-2xl leading-8;
+  }
+
+  h2 {
+    @apply text-xl leading-7;
+  }
+
+  h3 {
+    @apply text-lg leading-6;
+  }
 }
 
-@keyframes slide-out {
-    from {
-        transform: translateX(0);
-        opacity: 1;
-    }
+@media (min-width: 641px) and (max-width: 1023px) {
+  .container {
+    @apply px-6;
+  }
 
-    to {
-        transform: translateX(400px);
-        opacity: 0;
-    }
+  .phone-mockup {
+    width: 320px;
+    height: 570px;
+  }
 }
 
-.animate-slide-in {
-    animation: slide-in 0.5s ease-out;
+/* ============================================
+   접근성
+   ============================================ */
+
+.drag-handle-improved:focus-visible,
+.link-toggle-btn:focus-visible,
+.link-delete-btn:focus-visible,
+.auto-fill-btn:focus-visible,
+input:focus-visible,
+button:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  @apply outline outline-2 outline-blue-500 outline-offset-2;
+}
+
+.link-card:focus-within {
+  @apply shadow-lg;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+}
+
+@media (pointer: coarse) {
+  button,
+  a,
+  input[type="checkbox"],
+  input[type="radio"] {
+    @apply min-w-[44px] min-h-[44px];
+  }
+}
+
+/* 리듀스 모션 대응 */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Safe Area 대응 */
+@supports (padding: max(0px)) {
+  .mobile-preview-btn {
+    bottom: max(20px, env(safe-area-inset-bottom));
+    right: max(20px, env(safe-area-inset-right));
+  }
+
+  .toast {
+    bottom: max(24px, calc(env(safe-area-inset-bottom) + 24px));
+  }
+
+  @media (max-width: 640px) {
+    .toast {
+      bottom: max(80px, calc(env(safe-area-inset-bottom) + 80px));
+      left: max(16px, env(safe-area-inset-left));
+      right: max(16px, env(safe-area-inset-right));
+    }
+  }
+}
+
+/* 기타 유틸리티 */
+html {
+  @apply scroll-smooth;
+}
+
+::selection {
+  @apply bg-blue-600 text-white;
+}
+
+::-moz-selection {
+  @apply bg-blue-600 text-white;
 }

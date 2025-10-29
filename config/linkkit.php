@@ -19,7 +19,7 @@ return [
         'gradient' => '그라데이션',
         'image' => '이미지',
         'video' => '영상',
-        'animated' => '애니메이션',
+        // 'animated' => '애니메이션',
     ],
 
     // 배경 패턴 오버레이
